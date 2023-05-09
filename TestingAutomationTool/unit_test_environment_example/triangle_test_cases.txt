@@ -1,0 +1,6 @@
+/* function prototype at the first line */
+/* from the second line: test_no, param1, param2, param3, expected_output */
+1 2 2 4 2 
+2 3 2 4 3
+3 3 3 3 0 
+4 1 2 5 2
