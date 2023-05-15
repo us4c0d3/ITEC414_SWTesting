@@ -52,7 +52,7 @@
 Usage: ./my_testing_tool.sh <c_code_file> <test_case_file>
 <br><br>
 실행 시 권한 문제가 발생할 수 있습니다. 그럴 경우에는 다음 명령어로 권한을 부여해주십시오.
-`$ chmod 777 my_testing_tool.sh`
+```$ chmod 777 my_testing_tool.sh```
 <br><br>
 실행 결과로 `{function_name}_driver.c`, `{function_name}_test_result.txt` 그리고 `gcov`의 결과로 생기는 파일들이 생성됩니다.
 <br><br>
