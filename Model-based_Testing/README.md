@@ -171,7 +171,771 @@ LTLSPEC G((state = Cooking & power = Half) -> (state = Final -> power = Half))
 
 ## 3. Test cases and coverage analysis report
 
-...
+### LTL specs from transition coverage criteria
+
+```
+008 : G (state = Initial -> !( F state = Waiting)) 
+  [LTL            False          9      N/A]
+009 : G (state = Waiting -> !( F (state = PowerSelected & power = Full))) 
+  [LTL            False          18     N/A]
+010 : G (state = Waiting -> !( F (state = PowerSelected & power = Half))) 
+  [LTL            False          19     N/A]
+011 : G (state = PowerSelected -> !( F state = TimeSelected)) 
+  [LTL            False          10     N/A]
+012 : G (state = TimeSelected -> !( F state = Enabled)) 
+  [LTL            False          11     N/A]
+013 : G (state = Enabled -> !( F state = Waiting)) 
+  [LTL            False          12     N/A]
+014 : G (state = Enabled -> !( F state = Cooking)) 
+  [LTL            False          13     N/A]
+015 : G (state = Cooking -> !( F ((state = Alarm & time > 0) & door = Opened))) 
+  [LTL            False          14     N/A]
+016 : G (state = Cooking -> !( F ((state = Alarm & time = 0) & door = Closed))) 
+  [LTL            False          15     N/A]
+017 : G (state = Alarm -> !( F state = Cooking)) 
+  [LTL            False          16     N/A]
+018 : G (state = Alarm -> !( F state = Final)) 
+  [LTL            False          17     N/A]
+```
+
+ 이후 `Counterexample`분석은 상기 인덱스 기준으로 분석
+
+
+
+### Analysis
+
+#### 008 : G (state = Initial -> !( F state = Waiting))
+
+```
+008 : G (state = Initial -> !( F state = Waiting)) 
+  [LTL            False          9      N/A]
+```
+
+```
+-- specification  G (state = Initial -> !( F state = Waiting))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 9.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 9.2 <-
+    event = On
+  -- Loop starts here
+  -> State: 9.3 <-
+    state = Waiting
+    event = NONE
+  -- Loop starts here
+  -> State: 9.4 <-
+  -> State: 9.5 <-
+```
+
+
+
+
+
+#### 009 : G (state = Waiting -> !( F (state = PowerSelected & power = Full)))
+
+```
+009 : G (state = Waiting -> !( F (state = PowerSelected & power = Full))) 
+  [LTL            False          18     N/A]
+```
+
+```
+-- specification  G (state = Waiting -> !( F (state = PowerSelected & power = Full)))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 18.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 18.2 <-
+    event = On
+  -> State: 18.3 <-
+    state = Waiting
+    event = NONE
+  -> State: 18.4 <-
+    event = SetPowerFull
+  -> State: 18.5 <-
+    state = PowerSelected
+    event = NONE
+    power = 600
+  -> State: 18.6 <-
+  -> State: 18.7 <-
+    event = SetTime
+  -> State: 18.8 <-
+    state = TimeSelected
+    time = 1
+  -> State: 18.9 <-
+    state = Enabled
+  -> State: 18.10 <-
+    counter = 1
+  -> State: 18.11 <-
+    counter = 2
+  -> State: 18.12 <-
+    counter = 3
+  -> State: 18.13 <-
+    counter = 4
+  -> State: 18.14 <-
+    counter = 5
+  -> State: 18.15 <-
+    state = Waiting
+    event = NONE
+    power = 300
+    time = 0
+  -> State: 18.16 <-
+    event = SetPowerFull
+  -- Loop starts here
+  -> State: 18.17 <-
+    state = PowerSelected
+    event = NONE
+    power = 600
+  -- Loop starts here
+  -> State: 18.18 <-
+  -> State: 18.19 <-
+    event = SetTime
+  -> State: 18.20 <-
+    state = TimeSelected
+    time = 1
+  -> State: 18.21 <-
+    state = Enabled
+  -> State: 18.22 <-
+    state = Waiting
+    event = NONE
+    power = 300
+    time = 0
+  -> State: 18.23 <-
+    event = SetPowerFull
+  -- Loop starts here
+  -> State: 18.24 <-
+    state = PowerSelected
+    event = NONE
+    power = 600
+  -> State: 18.25 <-
+```
+
+
+
+
+
+#### 010 : G (state = Waiting -> !( F (state = PowerSelected & power = Half)))
+
+```
+010 : G (state = Waiting -> !( F (state = PowerSelected & power = Half))) 
+  [LTL            False          19     N/A]
+```
+
+```
+-- specification  G (state = Waiting -> !( F (state = PowerSelected & power = Half)))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 19.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 19.2 <-
+    event = On
+  -> State: 19.3 <-
+    state = Waiting
+    event = NONE
+  -> State: 19.4 <-
+    event = SetPowerHalf
+  -> State: 19.5 <-
+    state = PowerSelected
+    event = NONE
+  -> State: 19.6 <-
+  -> State: 19.7 <-
+    event = SetTime
+  -> State: 19.8 <-
+    state = TimeSelected
+    time = 1
+  -> State: 19.9 <-
+    state = Enabled
+  -> State: 19.10 <-
+    counter = 1
+  -> State: 19.11 <-
+    counter = 2
+  -> State: 19.12 <-
+    counter = 3
+  -> State: 19.13 <-
+    counter = 4
+  -> State: 19.14 <-
+    counter = 5
+  -> State: 19.15 <-
+    state = Waiting
+    event = NONE
+    time = 0
+  -> State: 19.16 <-
+    event = SetPowerHalf
+  -- Loop starts here
+  -> State: 19.17 <-
+    state = PowerSelected
+    event = NONE
+  -- Loop starts here
+  -> State: 19.18 <-
+  -> State: 19.19 <-
+    event = SetTime
+  -> State: 19.20 <-
+    state = TimeSelected
+    time = 1
+  -> State: 19.21 <-
+    state = Enabled
+  -> State: 19.22 <-
+    state = Waiting
+    event = NONE
+    time = 0
+  -> State: 19.23 <-
+    event = SetPowerHalf
+  -- Loop starts here
+  -> State: 19.24 <-
+    state = PowerSelected
+    event = NONE
+  -> State: 19.25 <-
+```
+
+
+
+
+
+#### 011 : G (state = PowerSelected -> !( F state = TimeSelected))
+
+```
+011 : G (state = PowerSelected -> !( F state = TimeSelected)) 
+  [LTL            False          10     N/A]
+```
+
+```
+-- specification  G (state = PowerSelected -> !( F state = TimeSelected))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 10.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 10.2 <-
+    event = On
+  -> State: 10.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 10.4 <-
+    state = PowerSelected
+    event = NONE
+  -> State: 10.5 <-
+    event = SetTime
+  -> State: 10.6 <-
+    state = TimeSelected
+    event = NONE
+    time = 1
+  -> State: 10.7 <-
+    state = Enabled
+    event = On
+  -> State: 10.8 <-
+    event = SetTime
+    counter = 1
+  -> State: 10.9 <-
+    counter = 2
+  -> State: 10.10 <-
+    counter = 3
+  -> State: 10.11 <-
+    counter = 4
+  -> State: 10.12 <-
+    counter = 5
+  -> State: 10.13 <-
+    state = Waiting
+    event = SetPowerHalf
+    time = 0
+  -> State: 10.14 <-
+    state = PowerSelected
+    event = NONE
+  -> State: 10.15 <-
+    event = SetTime
+  -> State: 10.16 <-
+    state = TimeSelected
+    event = NONE
+    time = 1
+  -- Loop starts here
+  -> State: 10.17 <-
+    state = Enabled
+    event = On
+  -> State: 10.18 <-
+    state = Waiting
+    event = SetPowerHalf
+    time = 0
+  -> State: 10.19 <-
+    state = PowerSelected
+    event = NONE
+  -> State: 10.20 <-
+    event = SetTime
+  -> State: 10.21 <-
+    state = TimeSelected
+    event = NONE
+    time = 1
+  -> State: 10.22 <-
+    state = Enabled
+    event = On
+```
+
+
+
+
+
+#### 012 : G (state = TimeSelected -> !( F state = Enabled))
+
+```
+012 : G (state = TimeSelected -> !( F state = Enabled)) 
+  [LTL            False          11     N/A]
+```
+
+```
+-- specification  G (state = TimeSelected -> !( F state = Enabled))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 11.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 11.2 <-
+    event = On
+  -> State: 11.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 11.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 11.5 <-
+    state = TimeSelected
+    event = NONE
+    time = 1
+  -> State: 11.6 <-
+    state = Enabled
+    event = On
+  -> State: 11.7 <-
+    counter = 1
+  -> State: 11.8 <-
+    counter = 2
+  -> State: 11.9 <-
+    counter = 3
+  -> State: 11.10 <-
+    counter = 4
+  -> State: 11.11 <-
+    event = NONE
+    counter = 5
+  -- Loop starts here
+  -> State: 11.12 <-
+    state = Waiting
+    time = 0
+  -> State: 11.13 <-
+```
+
+
+
+
+
+#### 013 : G (state = Enabled -> !( F state = Waiting))
+
+```
+013 : G (state = Enabled -> !( F state = Waiting)) 
+  [LTL            False          12     N/A]
+```
+
+```
+-- specification  G (state = Enabled -> !( F state = Waiting))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 12.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 12.2 <-
+    event = On
+  -> State: 12.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 12.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 12.5 <-
+    state = TimeSelected
+    time = 1
+  -> State: 12.6 <-
+    state = Enabled
+    event = On
+  -> State: 12.7 <-
+    event = SetTime
+    counter = 1
+  -> State: 12.8 <-
+    counter = 2
+  -> State: 12.9 <-
+    counter = 3
+  -> State: 12.10 <-
+    counter = 4
+  -> State: 12.11 <-
+    counter = 5
+  -> State: 12.12 <-
+    state = Waiting
+    event = NONE
+    time = 0
+  -> State: 12.13 <-
+  -> State: 12.14 <-
+    event = SetPowerHalf
+  -> State: 12.15 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 12.16 <-
+    state = TimeSelected
+    time = 1
+  -> State: 12.17 <-
+    state = Enabled
+    event = On
+  -> State: 12.18 <-
+    state = Waiting
+    event = OpenDoor
+    time = 0
+  -- Loop starts here
+  -> State: 12.19 <-
+    door = Opened
+  -> State: 12.20 <-
+```
+
+
+
+
+
+#### 014 : G (state = Enabled -> !( F state = Cooking))
+
+```
+014 : G (state = Enabled -> !( F state = Cooking)) 
+  [LTL            False          13     N/A]
+```
+
+```
+-- specification  G (state = Enabled -> !( F state = Cooking))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 13.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 13.2 <-
+    event = On
+  -> State: 13.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 13.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 13.5 <-
+    state = TimeSelected
+    time = 1
+  -> State: 13.6 <-
+    state = Enabled
+    event = On
+  -> State: 13.7 <-
+    event = PressButton
+    counter = 1
+  -> State: 13.8 <-
+    state = Cooking
+    event = SetTime
+    counter = 2
+  -> State: 13.9 <-
+    event = NONE
+    time = 0
+  -> State: 13.10 <-
+    state = Alarm
+  -- Loop starts here
+  -> State: 13.11 <-
+    state = Final
+  -> State: 13.12 <-
+```
+
+
+
+
+
+#### 015 : G (state = Cooking -> !( F ((state = Alarm & time > 0) & door = Opened)))
+
+```
+015 : G (state = Cooking -> !( F ((state = Alarm & time > 0) & door = Opened))) 
+  [LTL            False          14     N/A]
+```
+
+```
+-- specification  G (state = Cooking -> !( F ((state = Alarm & time > 0) & door = Opened)))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 14.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 14.2 <-
+    event = On
+  -> State: 14.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 14.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 14.5 <-
+    state = TimeSelected
+    time = 3
+  -> State: 14.6 <-
+    state = Enabled
+    event = PressButton
+  -> State: 14.7 <-
+    state = Cooking
+    event = NONE
+    counter = 1
+  -> State: 14.8 <-
+    event = OpenDoor
+    time = 2
+  -- Loop starts here
+  -> State: 14.9 <-
+    state = Alarm
+    event = On
+    door = Opened
+    time = 1
+  -- Loop starts here
+  -> State: 14.10 <-
+  -> State: 14.11 <-
+```
+
+
+
+
+
+#### 016 : G (state = Cooking -> !( F ((state = Alarm & time = 0) & door = Closed)))
+
+```
+016 : G (state = Cooking -> !( F ((state = Alarm & time = 0) & door = Closed))) 
+  [LTL            False          15     N/A]
+```
+
+```
+-- specification  G (state = Cooking -> !( F ((state = Alarm & time = 0) & door = Closed)))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 15.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 15.2 <-
+    event = On
+  -> State: 15.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 15.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 15.5 <-
+    state = TimeSelected
+    time = 1
+  -> State: 15.6 <-
+    state = Enabled
+    event = PressButton
+  -> State: 15.7 <-
+    state = Cooking
+    event = SetTime
+    counter = 1
+  -> State: 15.8 <-
+    time = 0
+  -> State: 15.9 <-
+    state = Alarm
+    event = NONE
+  -- Loop starts here
+  -> State: 15.10 <-
+    state = Final
+  -> State: 15.11 <-
+```
+
+
+
+
+
+#### 017 : G (state = Alarm -> !( F state = Cooking))
+
+```
+017 : G (state = Alarm -> !( F state = Cooking)) 
+  [LTL            False          16     N/A]
+```
+
+```
+-- specification  G (state = Alarm -> !( F state = Cooking))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 16.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 16.2 <-
+    event = On
+  -> State: 16.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 16.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 16.5 <-
+    state = TimeSelected
+    time = 2
+  -> State: 16.6 <-
+    state = Enabled
+    event = PressButton
+  -> State: 16.7 <-
+    state = Cooking
+    event = OpenDoor
+    counter = 1
+  -> State: 16.8 <-
+    state = Alarm
+    event = On
+    door = Opened
+    time = 1
+  -> State: 16.9 <-
+    event = CloseDoor
+  -> State: 16.10 <-
+    state = Cooking
+    event = SetTime
+    door = Closed
+  -> State: 16.11 <-
+    event = NONE
+    time = 0
+  -> State: 16.12 <-
+    state = Alarm
+  -- Loop starts here
+  -> State: 16.13 <-
+    state = Final
+  -> State: 16.14 <-
+```
+
+
+
+
+
+#### 018 : G (state = Alarm -> !( F state = Final))
+
+```
+018 : G (state = Alarm -> !( F state = Final)) 
+  [LTL            False          17     N/A]
+```
+
+```
+-- specification  G (state = Alarm -> !( F state = Final))  is false
+-- as demonstrated by the following execution sequence
+Trace Description: LTL Counterexample 
+Trace Type: Counterexample 
+  -> State: 17.1 <-
+    state = Initial
+    event = NONE
+    power = 300
+    door = Closed
+    time = 0
+    counter = 0
+    Half = 300
+    Full = 600
+  -> State: 17.2 <-
+    event = On
+  -> State: 17.3 <-
+    state = Waiting
+    event = SetPowerHalf
+  -> State: 17.4 <-
+    state = PowerSelected
+    event = SetTime
+  -> State: 17.5 <-
+    state = TimeSelected
+    time = 2
+  -> State: 17.6 <-
+    state = Enabled
+    event = PressButton
+  -> State: 17.7 <-
+    state = Cooking
+    event = OpenDoor
+    counter = 1
+  -> State: 17.8 <-
+    state = Alarm
+    event = NONE
+    door = Opened
+    time = 1
+  -> State: 17.9 <-
+    event = CloseDoor
+  -> State: 17.10 <-
+    state = Cooking
+    event = OpenDoor
+    door = Closed
+  -> State: 17.11 <-
+    state = Alarm
+    event = CloseDoor
+    door = Opened
+    time = 0
+  -- Loop starts here
+  -> State: 17.12 <-
+    state = Final
+    event = NONE
+    door = Closed
+  -- Loop starts here
+  -> State: 17.13 <-
+  -> State: 17.14 <-
+```
+
+
 
 
 
