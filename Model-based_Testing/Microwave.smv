@@ -1,0 +1,96 @@
+MODULE main
+  VAR
+    state: {Initial, Waiting, PowerSelected, TimeSelected, Enabled, Cooking, Alarm, Final};
+    event: {NONE, On, Off, OpenDoor, CloseDoor, SetPowerFull, SetPowerHalf, SetTime, PressButton, Complete};
+    power: {300, 600};
+    door: {Closed, Opened};
+    time: 0..60;
+    counter: 0..6;
+
+  DEFINE
+    Full:= 600;
+    Half:= 300;
+
+  ASSIGN
+    init(counter):= 0;
+    init(time):= 0;
+    init(state):= Initial;
+    init(event):= NONE;
+
+    next(state):= case
+        state = Initial & door = Closed & event = On    : Waiting;
+        state = Waiting & event = SetPowerFull  : PowerSelected;
+        state = Waiting & event = SetPowerHalf  : PowerSelected;
+        state = PowerSelected & event = SetTime : TimeSelected;
+        state = TimeSelected & door = Closed & time > 0 : Enabled;
+        state = Enabled & door = Closed & time > 0 & event = PressButton    : Cooking;
+        state = Enabled & counter >= 5  : Waiting;
+        state = Cooking & time = 0 & door = Closed  : Alarm;
+        state = Cooking & event = OpenDoor & time > 0   : Alarm;
+        state = Alarm & time > 0 & event = CloseDoor    : Cooking;
+        state = Alarm & time = 0    : Final;
+        TRUE                : state;
+    esac;
+
+    next(power):= case
+        state = Waiting & event = SetPowerFull  : Full;
+        state = Waiting & event = SetPowerHalf  : Half;
+        state = Enabled & counter >= 5          : {300, 600};
+        TRUE                                    : power;
+        esac;
+
+    next(time):= case
+        state = Initial & event = On & door = Closed    : 0;
+        state = PowerSelected & event = SetTime         : 1..60;
+        state = Enabled & counter >= 5                  : 0;
+        state = Cooking & time > 0                      : time -1;
+        TRUE                                            : time;
+    esac;
+
+    next(counter):= case
+        counter +1 > 5                                  : counter;
+        state = Initial & event = On & door = Closed    : 0;
+        state = TimeSelected & door = Closed & time > 0 : 0;
+        state = Enabled & counter < 5                   : counter +1;
+        TRUE                                            : counter;
+    esac;
+
+    next(door):= case
+        event = OpenDoor    : Opened;
+        event = CloseDoor   : Closed;
+        TRUE                : door;
+    esac;
+
+
+-- state coverage criteria
+LTLSPEC G(! F (state = Initial))
+LTLSPEC G(! F (state = Waiting))
+LTLSPEC G(! F (state = PowerSelected))
+LTLSPEC G(! F (state = TimeSelected))
+LTLSPEC G(! F (state = Enabled))
+LTLSPEC G(! F (state = Cooking))
+LTLSPEC G(! F (state = Alarm))
+LTLSPEC G(! F (state = Final))
+
+
+-- 3. transition coverage criteria
+LTLSPEC G((state = Initial) -> (! F (state = Waiting)))
+LTLSPEC G((state = Waiting) -> (! F (state = PowerSelected & power = Full)))
+LTLSPEC G((state = Waiting) -> (! F (state = PowerSelected & power = Half)))
+LTLSPEC G((state = PowerSelected) -> (! F (state = TimeSelected)))
+LTLSPEC G((state = TimeSelected) -> (! F (state = Enabled)))
+LTLSPEC G((state = Enabled) -> (! F (state = Waiting)))
+LTLSPEC G((state = Enabled) -> (! F (state = Cooking)))
+LTLSPEC G((state = Cooking) -> (! F (state = Alarm & time > 0 & door = Opened)))
+LTLSPEC G((state = Cooking) -> (! F (state = Alarm & time = 0 & door = Closed)))
+LTLSPEC G((state = Alarm) -> (! F (state = Cooking)))
+LTLSPEC G((state = Alarm) -> (! F (state = Final)))
+
+
+-- 4. proof that the model satisfies essential properties
+-- i. It never works(cooks) when the door is open
+LTLSPEC G(state != Cooking | door != Opened)
+-- ii. When Cooking state starts in Full power, it ends in Full power
+LTLSPEC G((state = Cooking & power = Full) -> (state = Final -> power = Full))
+-- iii. When Cooking state starts in Half power, it ends in Half power
+LTLSPEC G((state = Cooking & power = Half) -> (state = Final -> power = Half))
