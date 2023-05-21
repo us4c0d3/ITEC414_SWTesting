@@ -23,7 +23,7 @@ MODULE main
         state = Waiting & event = SetPowerHalf  : PowerSelected;
         state = PowerSelected & event = SetTime : TimeSelected;
         state = TimeSelected & door = Closed & time > 0 : Enabled;
-        state = Enabled & door = Closed & time > 0 & event = PressButton    : Cooking;
+        state = Enabled & door = Closed & time > 0 & counter < 5 & event = PressButton  : Cooking;
         state = Enabled & counter >= 5  : Waiting;
         state = Cooking & time = 0 & door = Closed  : Alarm;
         state = Cooking & event = OpenDoor & time > 0   : Alarm;
@@ -62,29 +62,17 @@ MODULE main
     esac;
 
 
--- state coverage criteria
-LTLSPEC G(! F (state = Initial))
-LTLSPEC G(! F (state = Waiting))
-LTLSPEC G(! F (state = PowerSelected))
-LTLSPEC G(! F (state = TimeSelected))
-LTLSPEC G(! F (state = Enabled))
-LTLSPEC G(! F (state = Cooking))
-LTLSPEC G(! F (state = Alarm))
-LTLSPEC G(! F (state = Final))
-
-
 -- 3. transition coverage criteria
-LTLSPEC G((state = Initial) -> (! F (state = Waiting)))
-LTLSPEC G((state = Waiting) -> (! F (state = PowerSelected & power = Full)))
-LTLSPEC G((state = Waiting) -> (! F (state = PowerSelected & power = Half)))
-LTLSPEC G((state = PowerSelected) -> (! F (state = TimeSelected)))
-LTLSPEC G((state = TimeSelected) -> (! F (state = Enabled)))
-LTLSPEC G((state = Enabled) -> (! F (state = Waiting)))
-LTLSPEC G((state = Enabled) -> (! F (state = Cooking)))
-LTLSPEC G((state = Cooking) -> (! F (state = Alarm & time > 0 & door = Opened)))
-LTLSPEC G((state = Cooking) -> (! F (state = Alarm & time = 0 & door = Closed)))
-LTLSPEC G((state = Alarm) -> (! F (state = Cooking)))
-LTLSPEC G((state = Alarm) -> (! F (state = Final)))
+LTLSPEC G(state = Initial & door = Closed & event = On -> !X(state = Waiting))  -- Initial -> Waiting
+LTLSPEC G(state = Waiting & (event = SetPowerFull | event = SetPowerHalf) -> !X(state = PowerSelected))  -- Waiting -> PowerSelected
+LTLSPEC G(state = PowerSelected & event = SetTime -> !X(state = TimeSelected))  -- PowerSelected -> TimeSelected
+LTLSPEC G(state = TimeSelected & door = Closed & time > 0 -> !X(state = Enabled))  -- TimeSelected -> Enabled
+LTLSPEC G(state = Enabled & door = Closed & time > 0 & counter < 5 & event = PressButton -> !X(state = Cooking))  -- Enabled -> Cooking
+LTLSPEC G(state = Enabled & counter >= 5 -> !X(state = Waiting))  -- Enabled -> Waiting
+LTLSPEC G(state = Cooking & time = 0 & door = Closed -> !X(state = Alarm))  -- Cooking -> Alarm (Cooking Complete) 
+LTLSPEC G(state = Cooking & event = OpenDoor & time > 0 -> !X(state = Alarm))  -- Cooking -> Alarm  (Door Opened)
+LTLSPEC G(state = Alarm & time > 0 & event = CloseDoor -> !X(state = Cooking))  -- Alarm -> Cooking
+LTLSPEC G(state = Alarm & time = 0 -> !X(state = Final))  -- Alarm -> Final
 
 
 -- 4. proof that the model satisfies essential properties
