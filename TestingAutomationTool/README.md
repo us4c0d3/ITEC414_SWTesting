@@ -1,5 +1,10 @@
 # Testing Automation Tool
 
+## Index
+1. [과제 개요](#과제-개요)
+2. [Tool Usage](#my-tool-usage)
+3. [Feedback](#feedback)
+
 ## 과제 개요
 ### 1. input
 
@@ -62,7 +67,7 @@ $ chmod 777 my_testing_tool.sh
 
 ---
 
-## Result
+## Feedback
 
 __20/25__
 
