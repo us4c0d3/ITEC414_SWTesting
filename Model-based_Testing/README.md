@@ -820,5 +820,15 @@ LTLSPEC G((state = Cooking & power = Half) -> (state = Final -> power = Half))
   [LTL            True           N/A    N/A]
 ```
 
+---
 
+## Result
 
+|평가기준|코멘트|점수|
+|:-----:|-------|------:|
+|모델의 적정성|power 유지관련 성질 불만족| 9/10 점|
+|coverage spec의<br>올바름|test gen spec 필요 이상으로 복잡| 5/5 점|
+|correctness <br>proof spec의 올바름|corretness spec 부정확| 3/5 점|
+|transition coverage 100%를 <br>만족하는 testcase 생성 여부| . | 5/5 점|
+|correctness proof<br>입증 여부| . | 5/5 점|
+|||**총 점수: 27/30 점**|
