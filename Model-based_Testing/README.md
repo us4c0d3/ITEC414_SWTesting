@@ -1,5 +1,12 @@
 # Assignment: Model-based Test Generation
 
+## Index
+1. [Functional Requirements](#functional-requirements-microwave-controller)
+2. [TODO](#to-do)
+3. [Submit](#submit)
+4. [Report](#report)
+5. [Feedback](#feedback)
+
 ## Functional Requirements: Microwave controller
 
 * 전원을 켜면 시간을 디스플레이하고 사용자의 입력을 기다리며 대기한다
@@ -822,7 +829,7 @@ LTLSPEC G((state = Cooking & power = Half) -> (state = Final -> power = Half))
 
 ---
 
-## Result
+## Feedback
 
 |평가기준|코멘트|점수|
 |:-----:|-------|------:|
