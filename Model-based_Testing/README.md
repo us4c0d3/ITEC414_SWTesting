@@ -5,6 +5,10 @@
 2. [TODO](#to-do)
 3. [Submit](#submit)
 4. [Report](#report)
+   1. [FSM](#1-fsm-model-graphical)
+   2. [NuSMV Model](#2-nusmv-model-with-ltl-properties-for-100-transition-coverage)
+   3. [Test Cases and Coverage Analysis](#3-test-cases-and-coverage-analysis-report)
+   4. [Proof of the Essential Properties](#4-proof-that-your-model-satisfies-essential-properties)
 5. [Feedback](#feedback)
 
 ## Functional Requirements: Microwave controller
