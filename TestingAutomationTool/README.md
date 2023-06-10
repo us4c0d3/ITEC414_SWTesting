@@ -59,3 +59,11 @@ $ chmod 777 my_testing_tool.sh
 실행 결과로 `{function_name}_driver.c`, `{function_name}_test_result.txt` 그리고 `gcov`의 결과로 생기는 파일들이 생성됩니다.
 <br><br>
 테스트 실행 결과 및 `gcov`를 이용한 coverage testing결과는 `{function_name}_test_result.txt`에 출력됩니다.
+
+---
+
+## Result
+
+__20/25__
+
+> tc1: driver compile error
