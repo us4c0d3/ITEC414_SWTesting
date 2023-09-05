@@ -72,7 +72,7 @@
 
 ## 1. FSM model (Graphical)
 
-<img src="./Microwave_FSM.png">
+<img src="./images/Microwave_FSM.png">
 
 ## 2. NuSMV model (with LTL properties for 100% transition coverage)
 
